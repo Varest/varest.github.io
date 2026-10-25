@@ -73,7 +73,7 @@ figcaption { font-size: 15px; line-height: 1.65; margin-top: 14px; }
 .pdf-status { padding: 24px; text-align: center; font-size: 14px; }
 .pdf-link { display: block; width: fit-content; margin: 8px 0 0 auto; font-size: 13px; }
 .figure-portrait { max-width: 850px; margin-inline: auto; }
-.radar-figure { max-width: 860px; margin: 42px auto; text-align: center; }
+.radar-figure { max-width: 680px; margin: 42px auto; text-align: center; }
 .method-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin: 36px 0; }
 .step-number { display: block; font-size: 14px; color: var(--blue); margin-bottom: 10px; }
 .method-steps p { font-size: 15px; margin-bottom: 0; }
