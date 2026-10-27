@@ -26,7 +26,8 @@ document.querySelectorAll('video[data-scroll-play]').forEach((video) => {
   const root = document.querySelector('#cases');
   if (!data || !root) return;
   const $ = (selector) => root.querySelector(selector);
-  const state = { group: 0, prompt: 0, budget: 0 };
+  const baselines = data.methods.filter((m) => m.key !== 'varest');
+  const state = { group: 0, prompt: 0, budget: 0, baseline: 0 };
 
   function el(tag, className, text) {
     const node = document.createElement(tag);
@@ -77,37 +78,47 @@ document.querySelectorAll('video[data-scroll-play]').forEach((video) => {
     return layer ? `Layer ${layer}: ${count}` : `Before LLM: ${count}`;
   }
 
-  // One block per method at the selected budget, each showing its pruning stages.
+  function head(label, run, className) {
+    const node = el('div', `case-method-head ${className}`);
+    node.append(el('strong', '', label), verdict(run));
+    return node;
+  }
+
+  // Varest beside one chosen baseline. Rows line up: the first reduction on top,
+  // the in-LLM selection below (for baselines with several later stages, a grid of small panels).
   function render() {
     const group = data.groups[state.group];
     const prompt = group.prompts[state.prompt];
     const budgets = data.budgets.map(String);
     const budget = budgets[state.budget];
-    // Size columns for the longest method at any budget so images keep their size when switching.
-    const stages = Math.max(...data.methods.flatMap((m) => budgets.map((b) => prompt.methods[m.key][b].panels.length)));
     root.style.setProperty('--aspect', group.aspect);
-    root.style.setProperty('--stages', stages);
     [...$('#case-thumbs').children].forEach((button, index) => button.setAttribute('aria-pressed', String(index === state.group)));
     toggles($('#case-prompts'), group.prompts.map((p) => p.q), state.prompt, (index) => { state.prompt = index; });
     toggles($('#case-budget'), budgets.map((b) => `B = ${b}`), state.budget, (index) => { state.budget = index; });
+    toggles($('#case-baseline'), baselines.map((m) => m.label), state.baseline, (index) => { state.baseline = index; });
     $('#case-input').replaceChildren(shot(group.input, group.title));
     $('#case-legend').hidden = !prompt.gtBox;
 
-    const cells = data.methods.map(({ key, label }) => {
-      const run = prompt.methods[key][budget];
-      let panels = run.panels.map(([caption, src]) => [stageCaption(caption, run), src]);
-      if (key === 'varest') {
-        const [, tokens, kept, layer] = run.info.match(/K=(\d+).*K′=(\d+) after layer (\d+)/) || [];
-        panels = [[`Before LLM: ${tokens}`, run.panels[0][1]], [`Layer ${layer}: ${kept}`, run.panels[1][1]]];
-      }
-      const block = el('div', `case-method${key === 'varest' ? ' is-ours' : ''}`);
-      const head = el('div', 'case-method-head');
-      head.append(el('strong', '', label), verdict(run));
-      const row = el('div', 'case-stages');
-      row.append(...panels.map(([caption, src]) => shot(src, caption, prompt, run, false)));
-      block.append(head, row);
-      return block;
-    });
+    const ours = prompt.methods.varest[budget];
+    const [, tokens, kept, layer] = ours.info.match(/K=(\d+).*K′=(\d+) after layer (\d+)/) || [];
+    const { key, label } = baselines[state.baseline];
+    const run = prompt.methods[key][budget];
+    const stages = run.panels.map(([caption, src]) => [stageCaption(caption, run), src]);
+    const later = stages.slice(1);
+
+    const cells = [
+      head('Varest', ours, 'is-ours'), head(label, run, ''),
+      shot(ours.panels[0][1], `Before LLM: ${tokens}`, prompt, ours, false),
+      shot(stages[0][1], stages[0][0], prompt, run, false),
+      shot(ours.panels[1][1], `Layer ${layer}: ${kept}`, prompt, ours, false),
+    ];
+    if (later.length > 1) {
+      const grid = el('div', 'case-stage-grid');
+      grid.append(...later.map(([caption, src]) => shot(src, caption, prompt, run, false)));
+      cells.push(grid);
+    } else {
+      cells.push(later.length ? shot(later[0][1], later[0][0], prompt, run, false) : el('span'));
+    }
     $('#case-grid').replaceChildren(...cells);
   }
 
