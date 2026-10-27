@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script src="assets/cases/cases.js" defer></script>
   <script src="script.js" defer></script>
   <script type="module" src="pdf-figures.js"></script>
   <title>Varest: Just Respect the Semantics</title>
@@ -74,17 +75,22 @@
 
     <section class="section" id="visualizations" aria-labelledby="visualizations-title">
       <h2 id="visualizations-title">Visualizations</h2>
-      <p class="section-intro">Explore how semantic structure, text, and scene context are represented as the token budget changes. Select a view below; use “Open PDF” to inspect a figure at full size.</p>
-      <div class="figure-browser" data-gallery>
-        <div class="tab-list" role="tablist" aria-label="Token visualization" hidden>
-          <button role="tab" id="tab-budgets" aria-selected="true" aria-controls="panel-budgets" tabindex="0">Across budgets</button>
-          <button role="tab" id="tab-baselines" aria-selected="false" aria-controls="panel-baselines" tabindex="-1">Baseline comparison</button>
-          <button role="tab" id="tab-prompts" aria-selected="false" aria-controls="panel-prompts" tabindex="-1">Different prompts</button>
+      <p class="section-intro">Pick a scene, a question, and a token budget. Each method shows how it reduces the image tokens at that budget, stage by stage; captions give where in the model each view is taken and how many image tokens remain. Varest merges semantic regions before the LLM and keeps the [REL]-selected tokens from layer 16. Examples use LLaVA-1.5-7B.</p>
+      <div class="cases" id="cases" hidden>
+        <div class="case-thumbs" id="case-thumbs" aria-label="Scene"></div>
+        <div class="case-layout">
+          <div class="case-controls">
+            <div class="case-input" id="case-input"></div>
+            <p>Question</p>
+            <div class="case-toggles" id="case-prompts"></div>
+            <p>Token budget</p>
+            <div class="case-toggles" id="case-budget"></div>
+            <p class="case-legend" id="case-legend" hidden>Dashed box: ground truth. Pink box: prediction.</p>
+          </div>
+          <div class="case-grid" id="case-grid"></div>
         </div>
-        <figure id="panel-budgets" role="tabpanel" aria-labelledby="tab-budgets" tabindex="0"><div class="pdf-figure"><div class="pdf-viewport" style="--pdf-ratio: 2400 / 1088"><div class="pdf-document" data-pdf="assets/qualitative_analysis.pdf" role="img" aria-label="Tokenization and tokens retained by REL at budgets of 32, 64, 128, and 224, for chart, jersey, and building examples."><p class="pdf-status">Use “Open PDF” to view this figure.</p></div></div><a class="pdf-link" href="assets/qualitative_analysis.pdf" target="_blank" rel="noopener" aria-label="Open PDF: tokenization across budgets">Open PDF <span aria-hidden="true">↗</span></a></div><figcaption><strong>Same scene, different granularity.</strong> Object regions become finer as the budget increases. Text tokens, remain identifiable across budgets. Examples use LLaVA-1.5-7B.</figcaption></figure>
-        <figure id="panel-baselines" role="tabpanel" aria-labelledby="tab-baselines" tabindex="0"><div class="pdf-figure figure-portrait"><div class="pdf-viewport" style="--pdf-ratio: 2400 / 1965"><div class="pdf-document" data-pdf="assets/baseline_visualization.pdf" role="img" aria-label="Comparison of HiDrop, LearnPruner, VisionZip++, CORE, and Varest on reading the shirt of the man in white. Varest preserves the context and answers Bwin."><p class="pdf-status">Use “Open PDF” to view this figure.</p></div></div><a class="pdf-link" href="assets/baseline_visualization.pdf" target="_blank" rel="noopener" aria-label="Open PDF: baseline comparison">Open PDF <span aria-hidden="true">↗</span></a></div><figcaption><strong>Keep the text and its context.</strong> This example contrasts Varest’s semantic regions with pruning and merging baselines on LLaVA-1.5-7B.</figcaption></figure>
-        <figure id="panel-prompts" role="tabpanel" aria-labelledby="tab-prompts" tabindex="0"><div class="pdf-figure"><div class="pdf-viewport" style="--pdf-ratio: 2400 / 720"><div class="pdf-document" data-pdf="assets/prompt_sensitivity.pdf" role="img" aria-label="For two questions about a soccer ball and trees, Varest retains nearly identical tokens and correctly answers Left and Green."><p class="pdf-status">Use “Open PDF” to view this figure.</p></div></div><a class="pdf-link" href="assets/prompt_sensitivity.pdf" target="_blank" rel="noopener" aria-label="Open PDF: prompt comparison">Open PDF <span aria-hidden="true">↗</span></a></div><figcaption><strong>Relevance after reading.</strong> Nearly the same tokens are retained for two unrelated questions. The example suggests that early layers can absorb information before the corresponding image tokens are removed.</figcaption></figure>
       </div>
+      <noscript><p class="case-noscript">The interactive examples need JavaScript. Static figures: <a href="assets/qualitative_analysis.pdf">tokenization across budgets</a>, <a href="assets/baseline_visualization.pdf">baseline comparison</a>, <a href="assets/prompt_sensitivity.pdf">different prompts</a>.</p></noscript>
       <details class="figure-details"><summary>Inside the tokenizer: object boundaries and text <span aria-hidden="true">+</span></summary>
         <div class="localizer-grid"><figure><div class="pdf-figure"><div class="pdf-viewport" style="--pdf-ratio: 2400 / 931"><div class="pdf-document" data-pdf="assets/object_localizer.pdf" role="img" aria-label="Input images and predicted object boundary fields across diagrams, products, charts, and street scenes."><p class="pdf-status">Use “Open PDF” to view this figure.</p></div></div><a class="pdf-link" href="assets/object_localizer.pdf" target="_blank" rel="noopener" aria-label="Open PDF: object localizer examples">Open PDF <span aria-hidden="true">↗</span></a></div><figcaption><strong>Object localization.</strong> Boundary strength guides region merging.</figcaption></figure><figure><div class="pdf-figure"><div class="pdf-viewport" style="--pdf-ratio: 2400 / 1139"><div class="pdf-document" data-pdf="assets/text_localizer.pdf" role="img" aria-label="Text localization predictions for documents, charts, diagrams, and natural scenes."><p class="pdf-status">Use “Open PDF” to view this figure.</p></div></div><a class="pdf-link" href="assets/text_localizer.pdf" target="_blank" rel="noopener" aria-label="Open PDF: text localizer examples">Open PDF <span aria-hidden="true">↗</span></a></div><figcaption><strong>Text localization.</strong> Textness guides the allocation of fine detail.</figcaption></figure></div>
       </details>

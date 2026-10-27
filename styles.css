@@ -84,11 +84,48 @@ figcaption { font-size: 15px; line-height: 1.65; margin-top: 14px; }
 .figure-details[open] summary > span { transform: rotate(45deg); }
 .figure-details > figure, .localizer-grid { margin: 16px 0 24px; }
 .localizer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
-.tab-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 28px; }
-.tab-list button { color: var(--body); background: #fff; border: 1px solid #ccc; border-radius: 999px; padding: 9px 17px; font-size: 14px; }
-.tab-list button:hover { border-color: var(--ink); }
-.tab-list button[aria-selected="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
-.figure-browser figure { margin: 24px 0; }
+/* Case explorer: thumbnails select a scene; the view below updates in place. */
+.case-thumbs { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-bottom: 20px; }
+.case-thumbs button { display: flex; flex-direction: column; justify-content: flex-start; padding: 0; border: 0; background: none; color: var(--ink); font-size: 13px; line-height: 1.3; }
+.case-thumbs img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; outline: 1px solid transparent; outline-offset: 2px; }
+.case-thumbs button:hover img { outline-color: #ccc; }
+.case-thumbs [aria-pressed="true"] img { outline-color: var(--ink); }
+/* Only the selected scene shows its name; the space is reserved so nothing shifts. */
+.case-thumbs span { display: block; margin-top: 8px; visibility: hidden; }
+.case-thumbs [aria-pressed="true"] span { visibility: visible; }
+.case-toggles { display: flex; flex-wrap: wrap; gap: 6px; }
+.case-toggles button { padding: 4px 12px; border: 1px solid #ccc; border-radius: 999px; background: #fff; color: var(--body); font-size: 13px; }
+.case-toggles button:hover { border-color: var(--ink); }
+.case-toggles [aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+/* Top: the input image beside the question and budget pickers. */
+/* Left: input and pickers. Right: the methods. */
+.case-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 28px; align-items: start; }
+.case-input { margin-bottom: 16px; }
+.case-input .frame { width: min(100%, calc(360px * var(--aspect))); margin-left: 0; }
+/* The selected thumbnail already names the scene. */
+.case-input figcaption { display: none; }
+.case-controls p { margin: 0 0 6px; color: var(--ink); font-size: 13px; font-weight: 500; }
+.case-controls .case-toggles { margin-bottom: 14px; }
+.case-controls .case-legend { margin: 0; color: var(--body); font-weight: 400; font-size: 13px; }
+/* Below: one row per method; the label column holds the method name and its answer. */
+/* Method blocks flow onto shared lines; images are sized so the longest method fills one line. */
+.case-grid { container-type: inline-size; display: flex; flex-wrap: wrap; gap: 14px 18px; }
+.case-method-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; margin-bottom: 4px; font-size: 13px; }
+.case-method-head strong { color: var(--ink); font-weight: 600; }
+.case-method.is-ours strong { color: var(--blue); }
+.case-stages { display: flex; flex-wrap: wrap; gap: 4px; }
+.case-stages .shot { width: calc((100cqw - (var(--stages) - 1) * 4px) / var(--stages)); }
+.shot { text-align: center; }
+.shot figcaption { margin-top: 2px; font-size: 11px; line-height: 1.3; }
+.frame { position: relative; width: 100%; aspect-ratio: var(--aspect); margin-inline: auto; }
+.frame img { width: 100%; height: 100%; object-fit: contain; }
+.box { position: absolute; pointer-events: none; }
+.box-gt { border: 2px dashed #fff; outline: 1px solid rgb(0 0 0 / .5); }
+.box-pred { border: 2px solid #e8336d; }
+.answer { margin: 0; font-size: 12px; font-weight: 500; overflow-wrap: anywhere; }
+.answer.is-ok { color: #1f7a3d; }
+.answer.is-bad { color: #c0362c; }
+.case-noscript { text-align: center; font-size: 15px; }
 .findings { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 24px; text-align: center; margin: 0 0 30px; padding: 22px 0; }
 .findings strong { display: block; color: var(--ink); font-weight: 600; font-size: 28px; line-height: 1.3; }
 .findings strong span { font-size: 16px; font-weight: 400; }
@@ -134,6 +171,9 @@ pre { padding: 24px; background: var(--surface); overflow-x: auto; margin: 0; fo
   .method-steps h3 { margin-bottom: 8px; }
   .localizer-grid, .discussion-grid { grid-template-columns: 1fr; gap: 24px; }
   .findings { grid-template-columns: 1fr; gap: 24px; }
+  .case-thumbs { grid-template-columns: repeat(4, 1fr); }
+  .case-layout { grid-template-columns: 1fr; gap: 20px; }
+  .case-stages .shot { width: calc((100cqw - 8px) / 2); }
   .table-heading { display: block; }
   .table-heading h3 { margin-bottom: 6px; }
   .table-heading span { display: block; margin-bottom: 12px; }
@@ -150,8 +190,6 @@ pre { padding: 24px; background: var(--surface); overflow-x: auto; margin: 0; fo
   .publication-status { font-size: 18px; }
   .tldr { font-size: 18px; text-align: left; }
   .section-intro { text-align: left; }
-  .tab-list { gap: 6px; }
-  .tab-list button { font-size: 13px; padding: 8px 12px; }
   .citation-heading { justify-content: space-between; gap: 16px; }
   .copy-button { position: static; }
   .result-callout { padding: 18px; }
