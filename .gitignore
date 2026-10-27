@@ -4,3 +4,6 @@ __pycache__/
 
 # Original video source; the website serves the compressed MP4.
 /assets/Varest.mov
+
+# Raw case-explorer runs; tools/build_cases.py exports what the site needs to assets/cases/.
+/chosen_cases_v2/
