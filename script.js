@@ -56,7 +56,8 @@ document.querySelectorAll('video[data-scroll-play]').forEach((video) => {
     const figure = el('figure', 'shot');
     const frame = el('div', 'frame');
     const img = el('img');
-    Object.assign(img, { src, alt: caption, decoding: 'async' });
+    // No visible caption; the stage and token count show on hover.
+    Object.assign(img, { src, alt: caption, title: caption, decoding: 'async' });
     frame.append(img);
     // Grounding cases: draw the ground-truth (dashed) and predicted boxes.
     [[prompt?.gtBox, 'box-gt'], [run?.box, 'box-pred']].forEach(([box, className]) => {
@@ -66,7 +67,7 @@ document.querySelectorAll('video[data-scroll-play]').forEach((video) => {
       Object.assign(node.style, { left: `${x1}%`, top: `${y1}%`, width: `${x2 - x1}%`, height: `${y2 - y1}%` });
       frame.append(node);
     });
-    figure.append(frame, el('figcaption', '', caption));
+    figure.append(frame);
     if (run && answer) figure.append(verdict(run));
     return figure;
   }
@@ -97,7 +98,6 @@ document.querySelectorAll('video[data-scroll-play]').forEach((video) => {
     toggles($('#case-budget'), budgets.map((b) => `B = ${b}`), state.budget, (index) => { state.budget = index; });
     toggles($('#case-baseline'), baselines.map((m) => m.label), state.baseline, (index) => { state.baseline = index; });
     $('#case-input').replaceChildren(shot(group.input, group.title));
-    $('#case-legend').hidden = !prompt.gtBox;
 
     const ours = prompt.methods.varest[budget];
     const [, tokens, kept, layer] = ours.info.match(/K=(\d+).*K′=(\d+) after layer (\d+)/) || [];

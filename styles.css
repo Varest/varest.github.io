@@ -102,11 +102,8 @@ figcaption { font-size: 15px; line-height: 1.65; margin-top: 14px; }
 .case-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 28px; align-items: start; padding: 20px; border: 1px solid var(--line); border-radius: 8px; background: #fafafa; }
 .case-input { margin-bottom: 16px; }
 .case-input .frame { width: min(100%, calc(360px * var(--aspect))); margin-left: 0; }
-/* The selected thumbnail already names the scene. */
-.case-input figcaption { display: none; }
-.case-controls p, .case-compare > p { margin: 0 0 6px; color: var(--ink); font-size: 13px; font-weight: 500; }
+.case-compare > p { margin: 0 0 6px; color: var(--ink); font-size: 13px; font-weight: 500; }
 .case-controls .case-toggles { margin-bottom: 14px; }
-.case-controls .case-legend { margin: 0; color: var(--body); font-weight: 400; font-size: 13px; }
 .case-compare { padding-left: 28px; border-left: 1px solid var(--line); }
 #case-baseline { margin-bottom: 16px; }
 /* Two columns, Varest and the chosen baseline; rows line up stage for stage. */
@@ -119,7 +116,6 @@ figcaption { font-size: 15px; line-height: 1.65; margin-top: 14px; }
 .case-stage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: min(100%, calc(300px * var(--aspect))); margin-inline: auto; }
 .case-stage-grid .frame { width: 100%; }
 .shot { text-align: center; }
-.shot figcaption { margin-top: 2px; font-size: 11px; line-height: 1.3; }
 .frame { position: relative; width: 100%; aspect-ratio: var(--aspect); margin-inline: auto; }
 .frame img { width: 100%; height: 100%; object-fit: contain; }
 .box { position: absolute; pointer-events: none; }

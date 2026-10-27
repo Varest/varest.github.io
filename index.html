@@ -75,17 +75,14 @@
 
     <section class="section" id="visualizations" aria-labelledby="visualizations-title">
       <h2 id="visualizations-title">Visualizations</h2>
-      <p class="section-intro">Pick a scene, a question, and a token budget. Each method shows how it reduces the image tokens at that budget, stage by stage; captions give where in the model each view is taken and how many image tokens remain. Varest merges semantic regions before the LLM and keeps the [REL]-selected tokens from layer 16. Examples use LLaVA-1.5-7B.</p>
+      <p class="section-intro">Pick a scene, a question, a token budget, and a baseline to compare against. Each method shows how it reduces the image tokens at that budget, stage by stage; hover an image to see where in the model it is taken and how many image tokens remain. Varest merges semantic regions before the LLM and keeps the [REL]-selected tokens from layer 16. On grounding questions, the dashed box is the ground truth and the pink box the prediction. Examples use LLaVA-1.5-7B.</p>
       <div class="cases" id="cases" hidden>
         <div class="case-thumbs" id="case-thumbs" aria-label="Scene"></div>
         <div class="case-layout">
           <div class="case-controls">
             <div class="case-input" id="case-input"></div>
-            <p>Question</p>
             <div class="case-toggles" id="case-prompts"></div>
-            <p>Token budget</p>
             <div class="case-toggles" id="case-budget"></div>
-            <p class="case-legend" id="case-legend" hidden>Dashed box: ground truth. Pink box: prediction.</p>
           </div>
           <div class="case-compare">
             <p>Compare with</p>
