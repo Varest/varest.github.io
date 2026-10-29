@@ -15,6 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="assets/cases/cases.js" defer></script>
+  <script src="assets/sweep/sweep.js" defer></script>
   <script src="script.js" defer></script>
   <script type="module" src="pdf-figures.js"></script>
   <title>Varest: Just Respect the Semantics</title>
@@ -102,6 +103,32 @@
         </div>
       </div>
       <noscript><p class="case-noscript">The interactive examples need JavaScript. Static figures: <a href="assets/qualitative_analysis.pdf">tokenization across budgets</a>, <a href="assets/baseline_visualization.pdf">baseline comparison</a>, <a href="assets/prompt_sensitivity.pdf">different prompts</a>.</p></noscript>
+      <div class="sweep" id="sweep" hidden>
+        <h3 id="sweep-title">Varest at every budget</h3>
+        <p class="sweep-intro">The same scenes with Varest alone, at 19 budgets from 8 to 224 layer-averaged image tokens (1.4% to 38.9% of the image’s 576). Drag the slider or press play to watch regions split as the budget grows and [REL] keep more of them. The marks above the slider show where the answer is right (green) or wrong (red).</p>
+        <div class="case-thumbs sweep-thumbs" id="sweep-thumbs" role="group" aria-label="Scene"></div>
+        <div class="sweep-panel" role="group" aria-labelledby="sweep-title">
+          <fieldset class="sweep-field">
+            <legend>Question <span class="sweep-bench" id="sweep-bench"></span></legend>
+            <div class="sweep-questions" id="sweep-prompts"></div>
+          </fieldset>
+          <div class="sweep-view" id="sweep-view"></div>
+          <div class="sweep-result">
+            <p class="sweep-answer" id="sweep-answer" aria-live="polite"></p>
+            <p class="sweep-expected" id="sweep-expected"></p>
+          </div>
+          <div class="sweep-budget">
+            <button class="sweep-play" id="sweep-play" type="button" aria-pressed="false"><span aria-hidden="true">▶</span> Play</button>
+            <div class="sweep-track">
+              <div class="sweep-field-head"><label for="sweep-budget">Token budget</label><output id="sweep-budget-value" for="sweep-budget"></output></div>
+              <div class="sweep-marks" id="sweep-marks" aria-hidden="true"></div>
+              <input class="sweep-range" type="range" id="sweep-budget" min="0" max="0" step="1" value="0">
+              <div class="sweep-ticks" id="sweep-ticks" aria-hidden="true"></div>
+            </div>
+          </div>
+          <p class="sweep-legend">Text regions keep their raw pixels (pink outline); [REL] keeps the tokens outlined in yellow from layer 16 on. Examples use LLaVA-1.5-7B.</p>
+        </div>
+      </div>
       <details class="figure-details"><summary>Inside the tokenizer: object boundaries and text <span aria-hidden="true">+</span></summary>
         <div class="localizer-grid"><figure><div class="pdf-figure"><div class="pdf-viewport" style="--pdf-ratio: 2400 / 931"><div class="pdf-document" data-pdf="assets/object_localizer.pdf" role="img" aria-label="Input images and predicted object boundary fields across diagrams, products, charts, and street scenes."><p class="pdf-status">Use “Open PDF” to view this figure.</p></div></div><a class="pdf-link" href="assets/object_localizer.pdf" target="_blank" rel="noopener" aria-label="Open PDF: object localizer examples">Open PDF <span aria-hidden="true">↗</span></a></div><figcaption><strong>Object localization.</strong> Boundary strength guides region merging.</figcaption></figure><figure><div class="pdf-figure"><div class="pdf-viewport" style="--pdf-ratio: 2400 / 1139"><div class="pdf-document" data-pdf="assets/text_localizer.pdf" role="img" aria-label="Text localization predictions for documents, charts, diagrams, and natural scenes."><p class="pdf-status">Use “Open PDF” to view this figure.</p></div></div><a class="pdf-link" href="assets/text_localizer.pdf" target="_blank" rel="noopener" aria-label="Open PDF: text localizer examples">Open PDF <span aria-hidden="true">↗</span></a></div><figcaption><strong>Text localization.</strong> Textness guides the allocation of fine detail.</figcaption></figure></div>
       </details>

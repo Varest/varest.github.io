@@ -7,3 +7,6 @@ __pycache__/
 
 # Raw case-explorer runs; tools/build_cases.py exports what the site needs to assets/cases/.
 /chosen_cases_v2/
+
+# Raw Varest budget-sweep run; tools/build_sweep.py exports what the site needs to assets/sweep/.
+/sweep19/
